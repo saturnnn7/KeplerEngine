@@ -1,0 +1,9 @@
+Unhandled exception. System.MissingMethodException: Method not found: 'ImGuiNET.RangeAccessor`1<Int32> ImGuiNET.ImGuiIOPtr.get_KeyMap()'.
+   at Silk.NET.OpenGL.Extensions.ImGui.ImGuiController.SetKeyMappings()
+   at Silk.NET.OpenGL.Extensions.ImGui.ImGuiController..ctor(GL gl, IView view, IInputContext input, Nullable`1 imGuiFontConfig, Action onConfigureIO)
+   at Silk.NET.OpenGL.Extensions.ImGui.ImGuiController..ctor(GL gl, IView view, IInputContext input)
+   at KeplerEngine.Renderer3D.App.Renderer3DApp.OnLoad() in D:\aprojects\KeplerSolution\KeplerEngine.Renderer3D\App\Renderer3DApp.cs:line 49
+   at Silk.NET.Windowing.Internals.ViewImplementationBase.Initialize()
+   at Silk.NET.Windowing.WindowExtensions.Run(IView view)
+   at KeplerEngine.Renderer3D.App.Renderer3DApp.Run() in D:\aprojects\KeplerSolution\KeplerEngine.Renderer3D\App\Renderer3DApp.cs:line 43
+   at Program.<Main>$(String[] args) in D:\aprojects\KeplerSolution\KeplerEngine.Renderer3D\Program.cs:line 4

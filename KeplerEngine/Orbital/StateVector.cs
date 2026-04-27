@@ -102,22 +102,37 @@ namespace KeplerEngine.Orbital
             double argPe = 0;
             if (nMag > 1e-12 && e > 1e-12)
             {
-                argPe = Math.Acos(Math.Clamp(Vector3d.Dot(n, eVec) / (nMag * e), -1.0, 1.0));
+                double cosW = Vector3d.Dot(n, eVec) / (nMag * e);
+                cosW  = Math.Clamp(cosW, -1.0, 1.0);
+                argPe = Math.Acos(cosW);
                 if (eVec.Z < 0) argPe = OrbitalMath.TwoPi - argPe;
             }
+            else if (e > 1e-12)
+            {
+                // No ascending node (equatorial orbit) — measure from x-axis
+                argPe = Math.Atan2(eVec.Y, eVec.X);
+                if (argPe < 0) argPe += OrbitalMath.TwoPi;
+            }
  
-            // True anomaly (ν)
+            // True anomaly (nu)
             double nu = 0;
             if (e > 1e-12)
             {
-                nu = Math.Acos(Math.Clamp(Vector3d.Dot(eVec, r) / (e * rMag), -1.0, 1.0));
-                if (Vector3d.Dot(r, v) < 0) nu = OrbitalMath.TwoPi - nu;
+                double cosNu = Vector3d.Dot(eVec, r) / (e * rMag);
+                cosNu = Math.Clamp(cosNu, -1.0, 1.0);
+                nu    = Math.Acos(cosNu);
+
+                // If radial velocity is negative (moving toward periapsis),
+                // true anomaly is in second half [pi, 2pi]
+                double vr = Vector3d.Dot(r, v);   // radial velocity
+                if (vr < 0) nu = OrbitalMath.TwoPi - nu;
             }
             else
             {
-                // Circular: use argument of latitude
-                nu = Math.Acos(Math.Clamp(Vector3d.Dot(n, r) / (nMag * rMag), -1.0, 1.0));
-                if (r.Z < 0) nu = OrbitalMath.TwoPi - nu;
+                // Circular: use argument of latitude u = argPe + nu
+                // For circular equatorial, use angle from x-axis
+                double u = Math.Atan2(r.Y, r.X);
+                nu = OrbitalMath.WrapAngle(u - 0);
             }
  
             return new KeplerianElements(a, e, inc, lan, argPe, nu);
